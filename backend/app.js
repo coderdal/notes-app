@@ -4,6 +4,8 @@ import cors from 'cors';
 import 'dotenv/config';
 // Middlewares
 import errorHandler from './middlewares/errorHandler.js';
+// Routes
+import authRoute from './routes/auth.js';
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 
 app.use(morgan('dev'));
+
+app.use('/auth', authRoute);
 
 app.use((_, __, next) => {
     const error = new Error("The requested resource could not be found.");
