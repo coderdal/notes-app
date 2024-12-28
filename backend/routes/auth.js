@@ -1,6 +1,6 @@
 import express from 'express';
 import Joi from 'joi';
-import { encryptPassword } from '../helper/helper.js';
+import { encryptPassword, generateSalt } from '../helper/helper.js';
 
 const router = express.Router();
 
@@ -15,7 +15,7 @@ router.post('/signup', (req, res) => {
     if (error) return res.status(400).json({ error: error.details[0].message });
 
     const { email, password, username } = req.body;
-    const { password: encryptedPassword, salt } = encryptPassword(password);
+    const { password: encryptedPassword, salt } = encryptPassword(password, generateSalt());
 
     res.send(`Signup page is running !`);
 });
