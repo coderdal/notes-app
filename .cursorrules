@@ -1,0 +1,1 @@
+I am developing a note-taking application. It will be full stack, backend node.js postgresql and frontend next js. I have finished created the database of this application /backend/notes-app.sql. Users can create notes, the note can be active, archived or deleted. Notes can be shared and some more.
