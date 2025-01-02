@@ -41,5 +41,21 @@ services:
       - .env
     command: npm run dev
 
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3010:3000"
+    volumes:
+      - ./frontend:/usr/src/app
+      - /usr/src/app/node_modules
+      - /usr/src/app/.next
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:${API_PORT}
+    depends_on:
+      - api
+    command: npm run dev
+
 volumes:
   postgres-data:
