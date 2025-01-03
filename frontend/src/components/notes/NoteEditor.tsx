@@ -6,6 +6,7 @@ import '@mdxeditor/editor/style.css';
 import { Note } from '@/lib/api';
 import { useDebounce } from '@/hooks/useDebounce';
 import {
+  imagePlugin,
   headingsPlugin,
   listsPlugin,
   quotePlugin,
@@ -147,6 +148,9 @@ export default function NoteEditor({ initialNote, onSave, isLoading, actions }: 
           placeholder="Type '/' for commands"
           contentEditableClassName="min-h-full prose prose-slate max-w-none !bg-white focus:outline-none"
           plugins={[
+            imagePlugin({
+              disableImageResize: true
+            }),
             headingsPlugin(),
             listsPlugin(),
             quotePlugin(),

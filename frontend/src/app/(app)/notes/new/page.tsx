@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import AppLayout from '@/components/layout/AppLayout';
 import NoteEditor from '@/components/notes/NoteEditor';
 import { notesApi } from '@/lib/api';
 import toast from 'react-hot-toast';
@@ -32,10 +31,8 @@ export default function NewNotePage() {
   };
 
   return (
-    <AppLayout>
-      <div className="h-full">
-        <NoteEditor onSave={handleSave} />
-      </div>
-    </AppLayout>
+    <div className="h-full">
+      <NoteEditor onSave={handleSave} />
+    </div>
   );
 } 

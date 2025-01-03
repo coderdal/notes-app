@@ -1,43 +1,34 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
 import { notesApi } from '@/lib/api';
 import AppLayout from '@/components/layout/AppLayout';
-import NotesList from '@/components/notes/NotesList';
-import { useRouter, useParams } from 'next/navigation';
+import NotesPageLayout from '@/components/notes/NotesPageLayout';
+import { usePathname } from 'next/navigation';
 
 export default function NotesLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter();
-  const params = useParams();
-  const noteId = params?.noteId as string;
-
-  const { data: notesData, isLoading: isLoadingNotes } = useQuery({
-    queryKey: ['notes'],
-    queryFn: () => notesApi.list(),
-  });
-
-  const handleNoteSelect = (id: string) => {
-    router.push(`/notes/${id}`);
-  };
+  const pathname = usePathname();
+  
+  // Show notes list for /notes, /notes/[id], and /notes/new but not for other special routes
+  const isMainNotesRoute = pathname === '/notes' || pathname === '/notes/new' || (
+    pathname.startsWith('/notes/') && 
+    !pathname.startsWith('/notes/shared') && 
+    !pathname.startsWith('/notes/archived') && 
+    !pathname.startsWith('/notes/trash')
+  );
 
   return (
     <AppLayout>
-      <div className="flex h-full">
-        {/* Notes List Sidebar */}
-        <div className="w-80 border-r border-gray-200 h-full overflow-y-auto">
-          <NotesList
-            notes={notesData?.notes || []}
-            selectedNoteId={noteId}
-            onNoteSelect={handleNoteSelect}
-            isLoading={isLoadingNotes}
-          />
-        </div>
-
-        {/* Note Content Area */}
-        <div className="flex-1 h-full overflow-y-auto">
+      {isMainNotesRoute ? (
+        <NotesPageLayout
+          queryKey="notes"
+          queryFn={notesApi.list}
+          basePath="/notes"
+        >
           {children}
-        </div>
-      </div>
+        </NotesPageLayout>
+      ) : (
+        children
+      )}
     </AppLayout>
   );
 } 

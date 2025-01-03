@@ -97,24 +97,6 @@ export const createShareSchema = Joi.object({
   })
 });
 
-// Attachment schemas
-export const uploadAttachmentSchema = Joi.object({
-  file: Joi.object({
-    originalname: Joi.string().required(),
-    mimetype: Joi.string().pattern(/^(image|application|text|video|audio)\/[\w.-]+$/).required()
-      .messages({
-        'string.pattern.base': 'Invalid file type'
-      }),
-    size: Joi.number().max(5 * 1024 * 1024).required() // 5MB limit
-      .messages({
-        'number.max': 'File size cannot exceed 5MB'
-      })
-  }).required()
-    .messages({
-      'any.required': 'File is required'
-    })
-});
-
 // Common parameter schemas
 export const idParamSchema = Joi.object({
   id: Joi.number().integer().positive().required()

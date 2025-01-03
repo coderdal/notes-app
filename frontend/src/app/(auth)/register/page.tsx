@@ -6,6 +6,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import PasswordInput from '@/components/ui/PasswordInput';
 import { EnvelopeIcon, UserIcon, CheckIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
 
 interface PasswordRequirement {
   label: string;
@@ -24,7 +25,14 @@ export default function RegisterPage() {
     { label: 'Contains a number', regex: /[0-9]/, met: false },
     { label: 'Contains a special character', regex: /[!@#$%^&*(),.?":{}|<>]/, met: false },
   ]);
-  const { register } = useAuth();
+  const { register, user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user) {
+      router.push('/notes');
+    }
+  }, [user]);
 
   useEffect(() => {
     setPasswordRequirements(prev =>

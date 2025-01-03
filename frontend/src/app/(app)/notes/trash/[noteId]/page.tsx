@@ -7,7 +7,7 @@ import NoteActions from '@/components/notes/NoteActions';
 import { useParams } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-export default function NoteDetailPage() {
+export default function TrashNoteDetailPage() {
   const params = useParams();
   const noteId = params.noteId as string;
   const queryClient = useQueryClient();
@@ -24,6 +24,7 @@ export default function NoteDetailPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
       queryClient.invalidateQueries({ queryKey: ['note', noteId] });
+      queryClient.invalidateQueries({ queryKey: ['trash-notes'] });
     },
     onError: () => {
       toast.error('Failed to save note');
@@ -53,7 +54,7 @@ export default function NoteDetailPage() {
   return (
     <div className="h-full flex flex-col">
       <div className="px-4 py-2 border-b border-gray-200">
-        <NoteActions note={note} view="default" />
+        <NoteActions note={note} view="trash" />
       </div>
       <div className="flex-1 overflow-y-auto">
         <NoteEditor

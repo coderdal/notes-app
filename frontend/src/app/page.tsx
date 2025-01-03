@@ -8,6 +8,8 @@ import {
   ShareIcon, 
   PencilSquareIcon 
 } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 const features = [
   {
@@ -34,6 +36,14 @@ const features = [
 
 export default function HomePage() {
   const { user } = useAuth();
+  const router = useRouter();
+
+  // Redirect authenticated users to /notes
+  useEffect(() => {
+    if (user) {
+      router.push('/notes');
+    }
+  }, [user]);
 
   return (
     <div className="bg-white">

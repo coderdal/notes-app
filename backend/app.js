@@ -12,7 +12,6 @@ import extractDeviceInfo from './middlewares/deviceInfo.js';
 import authRoute from './routes/auth.js';
 import notesRoute from './routes/notes.js';
 import shareRoute from './routes/share.js';
-import attachmentsRoute from './routes/attachments.js';
 
 const app = express();
 
@@ -31,7 +30,6 @@ app.use(morgan('dev'));
 app.use('/api', extractDeviceInfo, authRoute);
 app.use('/api', notesRoute);
 app.use('/api', shareRoute);
-app.use('/api', attachmentsRoute);
 
 // 404 handler
 app.use((_, __, next) => {
