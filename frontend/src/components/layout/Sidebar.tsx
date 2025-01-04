@@ -22,7 +22,7 @@ export default function Sidebar() {
       <div className="flex min-h-0 flex-1 flex-col border-r border-gray-200 bg-white">
         <div className="flex flex-1 flex-col overflow-y-auto pt-5 pb-4">
           <div className="flex flex-shrink-0 items-center px-4">
-            <Link href="/notes" className="text-lg font-semibold text-indigo-600">
+            <Link href="/notes" className="text-lg font-semibold text-stone-950">
               My Notes
             </Link>
           </div>

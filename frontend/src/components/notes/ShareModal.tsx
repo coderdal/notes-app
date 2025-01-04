@@ -149,7 +149,7 @@ export default function ShareModal({ isOpen, onClose, noteId }: ShareModalProps)
 
           <div className="fixed inset-0 z-10 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600" />
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-stone-950" />
             </div>
           </div>
         </Dialog>
@@ -204,7 +204,7 @@ export default function ShareModal({ isOpen, onClose, noteId }: ShareModalProps)
                         <RadioGroup.Label className="text-sm font-medium text-gray-900">Sharing Options</RadioGroup.Label>
                         <div className="mt-2 space-y-4">
                           <RadioGroup.Option value="public" className={({ checked }) =>
-                            `${checked ? 'border-indigo-600 ring-2 ring-indigo-600' : 'border-gray-300'}
+                            `${checked ? 'border-stone-950 ring-2 ring-stone-950' : 'border-gray-300'}
                              relative block cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between`
                           }>
                             {({ checked }) => (
@@ -219,13 +219,13 @@ export default function ShareModal({ isOpen, onClose, noteId }: ShareModalProps)
                                     </RadioGroup.Description>
                                   </div>
                                 </div>
-                                <div className={`${checked ? 'border-indigo-600' : 'border-transparent'} absolute -inset-px rounded-lg border-2 pointer-events-none`} aria-hidden="true" />
+                                <div className={`${checked ? 'border-stone-950' : 'border-transparent'} absolute -inset-px rounded-lg border-2 pointer-events-none`} aria-hidden="true" />
                               </>
                             )}
                           </RadioGroup.Option>
 
                           <RadioGroup.Option value="private" className={({ checked }) =>
-                            `${checked ? 'border-indigo-600 ring-2 ring-indigo-600' : 'border-gray-300'}
+                            `${checked ? 'border-stone-950 ring-2 ring-stone-950' : 'border-gray-300'}
                              relative block cursor-pointer rounded-lg border bg-white px-6 py-4 shadow-sm focus:outline-none sm:flex sm:justify-between`
                           }>
                             {({ checked }) => (
@@ -240,7 +240,7 @@ export default function ShareModal({ isOpen, onClose, noteId }: ShareModalProps)
                                     </RadioGroup.Description>
                                   </div>
                                 </div>
-                                <div className={`${checked ? 'border-indigo-600' : 'border-transparent'} absolute -inset-px rounded-lg border-2 pointer-events-none`} aria-hidden="true" />
+                                <div className={`${checked ? 'border-stone-950' : 'border-transparent'} absolute -inset-px rounded-lg border-2 pointer-events-none`} aria-hidden="true" />
                               </>
                             )}
                           </RadioGroup.Option>
@@ -277,12 +277,12 @@ export default function ShareModal({ isOpen, onClose, noteId }: ShareModalProps)
                               type="text"
                               readOnly
                               value={shareUrl}
-                              className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-3"
+                              className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-stone-950 sm:text-sm sm:leading-6 px-3"
                             />
                             <button
                               type="button"
                               onClick={copyToClipboard}
-                              className="relative -ml-px inline-flex items-center rounded-r-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-600"
+                              className="relative -ml-px inline-flex items-center rounded-r-lg border border-gray-300 bg-gray-50 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-stone-950"
                             >
                               Copy
                             </button>
@@ -295,7 +295,7 @@ export default function ShareModal({ isOpen, onClose, noteId }: ShareModalProps)
                 <div className="mt-6 sm:flex sm:flex-row-reverse gap-3">
                   <button
                     type="button"
-                    className="inline-flex w-full justify-center rounded-lg bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"
+                    className="inline-flex w-full justify-center rounded-lg bg-stone-950 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:ml-3 sm:w-auto"
                     onClick={handleShare}
                     disabled={isLoading || (shareType === 'private' && !emails.length)}
                   >

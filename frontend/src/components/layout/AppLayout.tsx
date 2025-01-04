@@ -56,9 +56,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
 
         {/* App Logo/Name */}
         <div className={`${isCollapsed ? 'justify-center' : 'px-4'} flex items-center`}>
-          <Link href="/notes" className="hover:text-indigo-600 transition-colors">
+          <Link href="/notes" className="hover:text-stone-950 transition-colors">
             <h1 className={`text-xl font-semibold text-gray-900 ${isCollapsed ? 'hidden' : 'block'}`}>Notes</h1>
-            {isCollapsed && <DocumentTextIcon className="h-6 w-6 text-gray-900 hover:text-indigo-600" />}
+            {isCollapsed && <DocumentTextIcon className="h-6 w-6 text-gray-900 hover:text-stone-950" />}
           </Link>
         </div>
 

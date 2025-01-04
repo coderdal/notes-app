@@ -51,7 +51,7 @@ export default function EmailInput({ value, onChange, placeholder = 'Add more pe
 
   return (
     <div 
-      className="min-h-[80px] p-2 rounded-lg border-0 ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-indigo-600"
+      className="min-h-[80px] p-2 rounded-lg border-0 ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-stone-950"
       onClick={() => inputRef.current?.focus()}
     >
       <div className="flex flex-wrap gap-2">
@@ -67,7 +67,7 @@ export default function EmailInput({ value, onChange, placeholder = 'Add more pe
                 e.stopPropagation();
                 removeEmail(email);
               }}
-              className="text-indigo-600 hover:text-indigo-800 rounded-full p-0.5 hover:bg-indigo-100 focus:outline-none"
+              className="text-stone-950 hover:text-indigo-800 rounded-full p-0.5 hover:bg-indigo-100 focus:outline-none"
             >
               <XMarkIcon className="h-4 w-4" />
             </button>

@@ -63,7 +63,7 @@ export default function RouteProgressBar() {
     <div className="fixed top-0 left-0 right-0 z-50">
       <div className="h-1 w-full bg-indigo-100">
         <div
-          className="h-full bg-indigo-600 transition-all duration-300 ease-out"
+          className="h-full bg-stone-950 transition-all duration-300 ease-out"
           style={{
             width: `${progress}%`,
             transition: progress === 100 ? 'all 200ms ease-out' : 'all 400ms ease-out'
