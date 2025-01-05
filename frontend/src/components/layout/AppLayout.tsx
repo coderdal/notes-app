@@ -11,7 +11,8 @@ import {
   ArrowLeftOnRectangleIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
-  DocumentTextIcon 
+  DocumentTextIcon,
+  UserIcon
 } from '@heroicons/react/24/outline';
 import { useRouter, usePathname } from 'next/navigation';
 import { auth } from '@/lib/auth';
@@ -110,8 +111,15 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </div>
         </nav>
 
-        {/* Logout Button */}
-        <div className={`${isCollapsed ? 'px-2' : 'px-3'} mt-auto`}>
+        {/* Profile and Logout */}
+        <div className={`${isCollapsed ? 'px-2' : 'px-3'} mt-auto space-y-1`}>
+          <Link
+            href="/profile"
+            className={getLinkClassName('/profile')}
+          >
+            <UserIcon className={`${isCollapsed ? '' : 'mr-3'} h-5 w-5`} />
+            {!isCollapsed && 'Profile'}
+          </Link>
           <button
             onClick={handleLogout}
             className={`flex items-center ${isCollapsed ? 'justify-center' : ''} w-full px-2 py-2 text-sm font-medium text-gray-600 rounded-md hover:bg-gray-50 hover:text-gray-900 group`}

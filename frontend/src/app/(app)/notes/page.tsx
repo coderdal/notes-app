@@ -1,14 +1,5 @@
 'use client';
 
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { notesApi } from '@/lib/api';
-import AppLayout from '@/components/layout/AppLayout';
-import NotesList from '@/components/notes/NotesList';
-import NoteEditor from '@/components/notes/NoteEditor';
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-import toast from 'react-hot-toast';
-
 export default function NotesPage() {
   return (
     <div className="flex items-center justify-center h-full text-gray-500">

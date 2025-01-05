@@ -140,4 +140,82 @@ export const notesApi = {
   },
 };
 
+export const authApi = {
+  async updateUsername(data: { newUsername: string; password: string }) {
+    try {
+      const response = await api.post<{ username: string; message: string }>('/auth/change-username', data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Handle validation errors
+        if (error.response?.status === 400) {
+          const data = error.response.data;
+          if (data.validation) {
+            if (data.validation.includes('pattern')) {
+              throw new Error('Username can only contain letters, numbers, and underscores');
+            }
+            if (data.validation.includes('min')) {
+              throw new Error('Username must be at least 3 characters long');
+            }
+            if (data.validation.includes('max')) {
+              throw new Error('Username cannot exceed 50 characters');
+            }
+          }
+          throw new Error('The password you entered is incorrect');
+        }
+
+        // Handle other specific errors
+        switch (error.response?.status) {
+          case 409:
+            throw new Error('This username is already taken');
+          case 401:
+            throw new Error('Please log in again to continue');
+          case 404:
+            throw new Error('Account not found');
+          default:
+            throw new Error('Unable to update username. Please try again');
+        }
+      }
+      throw new Error('Unable to connect to the server. Please check your internet connection');
+    }
+  },
+
+  async changePassword(data: { currentPassword: string; newPassword: string }) {
+    try {
+      const response = await api.post<{ message: string }>('/auth/change-password', data);
+      return response.data;
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        // Handle validation errors
+        if (error.response?.status === 400) {
+          const data = error.response.data;
+          if (data.validation) {
+            if (data.validation.includes('pattern')) {
+              throw new Error('Password must include uppercase, lowercase, number, and special character');
+            }
+            if (data.validation.includes('min')) {
+              throw new Error('Password must be at least 8 characters long');
+            }
+            if (data.validation.includes('max')) {
+              throw new Error('Password is too long (maximum 100 characters)');
+            }
+          }
+          throw new Error('Your current password is incorrect');
+        }
+
+        // Handle other specific errors
+        switch (error.response?.status) {
+          case 401:
+            throw new Error('Please log in again to continue');
+          case 404:
+            throw new Error('Account not found');
+          default:
+            throw new Error('Unable to change password. Please try again');
+        }
+      }
+      throw new Error('Unable to connect to the server. Please check your internet connection');
+    }
+  }
+};
+
 export default api; 

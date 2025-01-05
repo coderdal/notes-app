@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { auth } from '@/lib/auth';
 import { useRouter } from 'next/navigation';
+import { authApi } from '@/lib/api';
 
 interface User {
   id: string;
@@ -16,6 +17,8 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
+  updateUsername: (newUsername: string, password: string) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -59,8 +62,45 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     router.push('/login');
   };
 
+  const updateUsername = async (newUsername: string, password: string) => {
+    try {
+      const { username } = await authApi.updateUsername({ newUsername, password });
+      setUser(prev => prev ? { ...prev, username } : null);
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Failed to update username');
+    }
+  };
+
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    try {
+      await authApi.changePassword({ currentPassword, newPassword });
+      // Clear tokens as the backend invalidates them
+      localStorage.removeItem('accessToken');
+      setUser(null);
+      router.push('/login');
+    } catch (error) {
+      if (error instanceof Error) {
+        throw error;
+      }
+      throw new Error('Failed to change password');
+    }
+  };
+
+  const value = {
+    user,
+    loading,
+    login,
+    register,
+    logout,
+    updateUsername,
+    changePassword
+  };
+
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider value={value}>
       {children}
     </AuthContext.Provider>
   );
