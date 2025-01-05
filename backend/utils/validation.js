@@ -172,7 +172,7 @@ export const changePasswordSchema = Joi.object({
       'string.empty': 'Current password is required'
     }),
   newPassword: Joi.string().min(8).max(100).required()
-    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.])[A-Za-z\d@$!%*?&.]/)
     .messages({
       'string.empty': 'New password is required',
       'string.min': 'New password must be at least 8 characters long',

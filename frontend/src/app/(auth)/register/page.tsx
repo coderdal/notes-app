@@ -18,12 +18,13 @@ export default function RegisterPage() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [passwordRequirements, setPasswordRequirements] = useState<PasswordRequirement[]>([
     { label: 'At least 8 characters long', regex: /.{8,}/, met: false },
     { label: 'Contains an uppercase letter', regex: /[A-Z]/, met: false },
     { label: 'Contains a lowercase letter', regex: /[a-z]/, met: false },
     { label: 'Contains a number', regex: /[0-9]/, met: false },
-    { label: 'Contains a special character', regex: /[!@#$%^&*(),.?":{}|<>]/, met: false },
+    { label: 'Contains a special character', regex: /[!@#$%^&*(),?":{}|<>]/, met: false },
   ]);
   const { register, user } = useAuth();
   const router = useRouter();
@@ -53,12 +54,19 @@ export default function RegisterPage() {
       return;
     }
 
+    setIsLoading(true);
     try {
       await register(username, email, password);
-      toast.success('Registration successful');
+      toast.success('Registration successful! Please log in.');
+      router.push('/login');
     } catch (err) {
-      console.error('Registration failed:', err);
-      toast.error('Registration failed. Please try again.');
+      if (err instanceof Error) {
+        toast.error(err.message);
+      } else {
+        toast.error('Something went wrong. Please try again.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -156,10 +164,20 @@ export default function RegisterPage() {
             <div>
               <button
                 type="submit"
-                disabled={!isPasswordValid}
-                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-stone-950 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                disabled={!isPasswordValid || isLoading}
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-stone-950 hover:bg-stone-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-stone-500 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Create account
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Creating account...
+                  </>
+                ) : (
+                  'Create account'
+                )}
               </button>
             </div>
           </form>
