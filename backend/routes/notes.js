@@ -208,4 +208,33 @@ router.patch('/notes/:id/status',
     }
 });
 
+// Permanently delete note
+router.delete('/notes/:id/permanent', 
+  verifyToken,
+  validate(idParamSchema, 'params'),
+  isNoteOwner,
+  async (req, res, next) => {
+    try {
+      // check if the note exists
+      const { rows: noteRows } = await pool.query(
+        'SELECT * FROM notes WHERE id = $1',
+        [req.params.id]
+      );
+
+      if (noteRows.length === 0) {
+        return res.status(404).json({ message: 'Note not found' });
+      }
+
+      // Permanently delete the note
+      const { rows } = await pool.query(
+        'DELETE FROM notes WHERE id = $1 RETURNING *',
+        [req.params.id]
+      );
+
+      res.json({ message: 'Note permanently deleted', note: rows[0] });
+    } catch (error) {
+      next(error);
+    }
+});
+
 export default router; 

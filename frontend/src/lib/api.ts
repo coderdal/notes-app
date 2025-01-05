@@ -113,6 +113,10 @@ export const notesApi = {
     await api.delete(`/notes/${id}`);
   },
 
+  async deletePermanently(id: string) {
+    await api.delete(`/notes/${id}/permanent`);
+  },
+
   async share(id: string, data: { shareType: 'public' | 'private'; userEmails?: string[]; expiresAt?: string }) {
     const response = await api.post<{
       share_url: string;

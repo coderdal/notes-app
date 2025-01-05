@@ -59,7 +59,7 @@ export default function NoteActions({ note, view }: NoteActionsProps) {
   const handleRecover = () => updateStatusMutation.mutate('active');
 
   const deletePermanentlyMutation = useMutation({
-    mutationFn: () => notesApi.delete(note.id),
+    mutationFn: () => notesApi.deletePermanently(note.id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['trash-notes'] });
       router.push('/notes/trash');
