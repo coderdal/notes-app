@@ -5,9 +5,11 @@ import { useRouter } from 'next/navigation';
 import NoteEditor from '@/components/notes/NoteEditor';
 import { notesApi } from '@/lib/api';
 import toast from 'react-hot-toast';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function NewNotePage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [noteId, setNoteId] = useState<string | null>(null);
 
   const handleSave = async (data: { title: string; content: string }) => {
@@ -17,6 +19,9 @@ export default function NewNotePage() {
         // First save - create the note
         const note = await notesApi.create(data);
         setNoteId(note.id);
+        
+        // Invalidate notes query to trigger a refetch
+        queryClient.invalidateQueries({ queryKey: ['notes'] });
         
         // Navigate to the note page
         router.push(`/notes/${note.id}`);
