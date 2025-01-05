@@ -137,7 +137,7 @@ export default function NoteEditor({ initialNote, onSave, isLoading, actions }: 
           id="title"
           required
           placeholder="Untitled"
-          className="block w-full border-0 py-5 text-3xl font-bold text-gray-900 placeholder:text-gray-300 focus:ring-0"
+          className="block w-full border-0 py-5 text-3xl font-bold text-gray-900 placeholder:text-gray-300 focus:ring-0 outline-none"
           value={title}
           onChange={(e) => handleTitleChange(e.target.value)}
           disabled={isLoading}

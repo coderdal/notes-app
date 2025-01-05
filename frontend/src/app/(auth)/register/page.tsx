@@ -171,9 +171,26 @@ export default function RegisterPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  By signing up, you agree to our Terms and Privacy Policy
+                  By creating an account, you agree to our
                 </span>
               </div>
+            </div>
+            <div className="mt-2 text-center text-sm">
+              <Link href="/legal/terms" className="text-stone-950 hover:text-indigo-500 font-medium">
+                Terms of Service
+              </Link>
+              <span className="text-gray-500">, </span>
+              <Link href="/legal/privacy" className="text-stone-950 hover:text-indigo-500 font-medium">
+                Privacy Policy
+              </Link>
+              <span className="text-gray-500">, </span>
+              <Link href="/legal/cookies" className="text-stone-950 hover:text-indigo-500 font-medium">
+                Cookie Policy
+              </Link>
+              <span className="text-gray-500">, and </span>
+              <Link href="/legal/acceptable-use" className="text-stone-950 hover:text-indigo-500 font-medium">
+                Acceptable Use Policy
+              </Link>
             </div>
           </div>
         </div>
