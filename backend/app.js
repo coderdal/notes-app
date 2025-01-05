@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 // Middlewares
 import errorHandler from './middlewares/errorHandler.js';
 import extractDeviceInfo from './middlewares/deviceInfo.js';
+import { globalLimiter, authLimiter } from './middlewares/rateLimiter.js';
 
 // Routes
 import authRoute from './routes/auth.js';
@@ -25,6 +26,10 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan('dev'));
+
+// Rate limiters
+app.use('/api', globalLimiter);
+app.use('/api/auth', authLimiter);
 
 // Apply routes
 app.use('/api', extractDeviceInfo, authRoute);
