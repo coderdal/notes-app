@@ -30,32 +30,25 @@ services:
       context: ./backend
     ports:
       - ${API_PORT}:${API_PORT}
-    volumes:
-      - ./backend/:/usr/src/app
-      - /usr/src/app/node_modules
     environment:
-      NODE_ENV: development
+      NODE_ENV: production
     depends_on:
       - db
     env_file:
       - .env
-    command: npm run dev
+    restart: always
 
   frontend:
     build:
       context: ./frontend
     ports:
       - ${FRONTEND_PORT}:3000
-    volumes:
-      - ./frontend:/usr/src/app
-      - /usr/src/app/node_modules
-      - /usr/src/app/.next
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
       - NEXT_PUBLIC_API_URL=http://localhost:${API_PORT}
     depends_on:
       - api
-    command: npm run dev
+    restart: always
 
 volumes:
   postgres-data:
