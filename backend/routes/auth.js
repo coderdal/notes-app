@@ -2,7 +2,7 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import pool from '../config/db.js';
 import validate from '../middlewares/validate.js';
-import { registerSchema, loginSchema } from '../utils/validation.js';
+import { registerSchema, loginSchema, changePasswordSchema, changeUsernameSchema } from '../utils/validation.js';
 import { verifyToken } from '../middlewares/auth.js';
 import { encryptPassword, generateSalt, encryptToken } from '../utils/helper.js';
 import { AuthenticationError, ConflictError, DatabaseError } from '../utils/errors.js';
@@ -242,6 +242,121 @@ router.post('/auth/logout',
       });
       
       res.status(204).send();
+    } catch (error) {
+      next(error);
+    }
+});
+
+// Change Password
+router.post('/auth/change-password',
+  verifyToken,
+  validate(changePasswordSchema),
+  async (req, res, next) => {
+    const { currentPassword, newPassword } = req.body;
+    const userId = req.user.id;
+
+    try {
+      // Get user's current password info
+      const { rows: [user] } = await pool.query(
+        'SELECT password_hash, password_salt FROM users WHERE id = $1',
+        [userId]
+      ).catch(err => {
+        throw new DatabaseError('Failed to fetch user', err);
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Verify current password
+      const { password: currentHashedPassword } = encryptPassword(currentPassword, user.password_salt);
+      if (currentHashedPassword !== user.password_hash) {
+        return res.status(400).json({ message: 'Current password is incorrect' });
+      }
+
+      // Generate new salt and hash for the new password
+      const newSalt = generateSalt();
+      const { password: newPasswordHash } = encryptPassword(newPassword, newSalt);
+
+      // Update password in database
+      await pool.query(
+        'UPDATE users SET password_hash = $1, password_salt = $2 WHERE id = $3',
+        [newPasswordHash, newSalt, userId]
+      ).catch(err => {
+        throw new DatabaseError('Failed to update password', err);
+      });
+
+      // Invalidate all refresh tokens for security
+      await pool.query(
+        'DELETE FROM refresh_tokens WHERE user_id = $1',
+        [userId]
+      ).catch(err => {
+        throw new DatabaseError('Failed to invalidate refresh tokens', err);
+      });
+
+      // Clear refresh token cookie
+      res.clearCookie('refreshToken', {
+        ...REFRESH_TOKEN_COOKIE_OPTIONS,
+        maxAge: undefined
+      });
+
+      res.status(200).json({ message: 'Password changed successfully' });
+    } catch (error) {
+      next(error);
+    }
+});
+
+// Change Username
+router.post('/auth/change-username',
+  verifyToken,
+  validate(changeUsernameSchema),
+  async (req, res, next) => {
+    const { newUsername, password } = req.body;
+    const userId = req.user.id;
+
+    try {
+      // Get user's current password info
+      const { rows: [user] } = await pool.query(
+        'SELECT password_hash, password_salt FROM users WHERE id = $1',
+        [userId]
+      ).catch(err => {
+        throw new DatabaseError('Failed to fetch user', err);
+      });
+
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+
+      // Verify password
+      const { password: hashedPassword } = encryptPassword(password, user.password_salt);
+      if (hashedPassword !== user.password_hash) {
+        return res.status(400).json({ message: 'Incorrect password' });
+      }
+
+      // Check if new username is already taken
+      const { rows: existingUser } = await pool.query(
+        'SELECT id FROM users WHERE username = $1 AND id != $2',
+        [newUsername, userId]
+      ).catch(err => {
+        throw new DatabaseError('Failed to check username availability', err);
+      });
+
+      if (existingUser.length > 0) {
+        return res.status(409).json({ message: 'Username is already taken' });
+      }
+
+      // Update username
+      await pool.query(
+        'UPDATE users SET username = $1 WHERE id = $2',
+        [newUsername, userId]
+      ).catch(err => {
+        throw new DatabaseError('Failed to update username', err);
+      });
+
+      res.status(200).json({ 
+        message: 'Username changed successfully',
+        username: newUsername
+      });
     } catch (error) {
       next(error);
     }

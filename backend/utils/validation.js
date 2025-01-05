@@ -149,4 +149,34 @@ export const searchSchema = Joi.object({
 });
 
 // Combined schema for notes listing
-export const notesListSchema = searchSchema.concat(paginationSchema); 
+export const notesListSchema = searchSchema.concat(paginationSchema);
+
+export const changeUsernameSchema = Joi.object({
+  newUsername: Joi.string().trim().min(3).max(50).required()
+    .pattern(/^[a-zA-Z0-9_]+$/)
+    .messages({
+      'string.empty': 'New username is required',
+      'string.min': 'New username must be at least 3 characters long',
+      'string.max': 'New username cannot exceed 50 characters',
+      'string.pattern.base': 'New username can only contain letters, numbers, and underscores'
+    }),
+  password: Joi.string().required()
+    .messages({
+      'string.empty': 'Password is required for verification'
+    })
+});
+
+export const changePasswordSchema = Joi.object({
+  currentPassword: Joi.string().required()
+    .messages({
+      'string.empty': 'Current password is required'
+    }),
+  newPassword: Joi.string().min(8).max(100).required()
+    .pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/)
+    .messages({
+      'string.empty': 'New password is required',
+      'string.min': 'New password must be at least 8 characters long',
+      'string.max': 'New password cannot exceed 100 characters',
+      'string.pattern.base': 'New password must contain at least one uppercase letter, one lowercase letter, one number, and one special character'
+    })
+}); 
