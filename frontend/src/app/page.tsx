@@ -14,6 +14,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Image from 'next/image';
 
 const features = [
   {
@@ -87,7 +88,7 @@ export default function HomePage() {
     if (user) {
       router.push('/notes');
     }
-  }, [user]);
+  }, [user, router]);
 
   return (
     <div className="bg-white">
@@ -187,10 +188,12 @@ export default function HomePage() {
               >
                 <div className="relative">
                   <div className="aspect-w-16 aspect-h-9 rounded-lg shadow-lg overflow-hidden">
-                    <img
+                    <Image
                       src={screenshot.imagePath}
                       alt={screenshot.title}
                       className="object-cover object-center"
+                      width={1920}
+                      height={1080}
                     />
                   </div>
                 </div>

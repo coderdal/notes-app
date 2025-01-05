@@ -1,23 +1,22 @@
 import { useQuery } from '@tanstack/react-query';
-import { notesApi } from '@/lib/api';
 import NotesList from '@/components/notes/NotesList';
 import { useRouter, useParams } from 'next/navigation';
 
-interface NotesPageLayoutProps {
+interface NotesPageLayoutProps<T extends { id: string; title: string; updated_at: string }> {
   children: React.ReactNode;
   queryKey: string;
-  queryFn: () => Promise<{ notes: any[] }>;
+  queryFn: () => Promise<{ notes: T[] }>;
   basePath: string;
-  onNoteSelect?: (note: any) => void;
+  onNoteSelect?: (note: T) => void;
 }
 
-export default function NotesPageLayout({ 
+export default function NotesPageLayout<T extends { id: string; title: string; updated_at: string }>({ 
   children, 
   queryKey, 
   queryFn, 
   basePath,
   onNoteSelect 
-}: NotesPageLayoutProps) {
+}: NotesPageLayoutProps<T>) {
   const router = useRouter();
   const params = useParams();
   const noteId = params?.noteId as string;
@@ -40,7 +39,7 @@ export default function NotesPageLayout({
     <div className="flex h-full">
       {/* Notes List Sidebar */}
       <div className="w-80 border-r border-gray-200 h-full overflow-y-auto">
-        <NotesList
+        <NotesList<T>
           notes={notesData?.notes || []}
           selectedNoteId={noteId}
           onNoteSelect={handleNoteSelect}

@@ -33,7 +33,7 @@ export default function RegisterPage() {
     if (user) {
       router.push('/notes');
     }
-  }, [user]);
+  }, [user, router]);
 
   useEffect(() => {
     setPasswordRequirements(prev =>

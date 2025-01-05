@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState, useEffect, useCallback } from 'react';
 import { Dialog, Transition, RadioGroup } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { notesApi } from '@/lib/api';
@@ -23,7 +23,7 @@ export default function ShareModal({ isOpen, onClose, noteId }: ShareModalProps)
     emails: string[];
   } | null>(null);
 
-  const fetchShareStatus = async () => {
+  const fetchShareStatus = useCallback(async () => {
     try {
       setIsFetching(true);
       const status = await notesApi.getShareStatus(noteId);
@@ -48,13 +48,13 @@ export default function ShareModal({ isOpen, onClose, noteId }: ShareModalProps)
     } finally {
       setIsFetching(false);
     }
-  };
+  }, [noteId]);
 
   useEffect(() => {
     if (isOpen) {
       fetchShareStatus();
     }
-  }, [isOpen, noteId]);
+  }, [isOpen, noteId, fetchShareStatus]);
 
   const handleShareTypeChange = (newType: 'public' | 'private') => {
     setShareType(newType);

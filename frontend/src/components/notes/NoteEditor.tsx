@@ -5,6 +5,7 @@ import { MDXEditor } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
 import { Note } from '@/lib/api';
 import { useDebounce } from '@/hooks/useDebounce';
+import { SVGProps } from 'react';
 import {
   imagePlugin,
   headingsPlugin,
@@ -37,7 +38,7 @@ import {
 
 interface Action {
   label: string;
-  icon: React.ComponentType<any>;
+  icon: React.ComponentType<SVGProps<SVGSVGElement>>;
   onClick: () => void;
   className?: string;
 }
@@ -56,7 +57,7 @@ export default function NoteEditor({ initialNote, onSave, isLoading, actions }: 
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
 
   const saveNote = useCallback(
-    async (newTitle: string, newContent: string) => {
+    async ([newTitle, newContent]: [string, string]) => {
       try {
         setIsSaving(true);
         await onSave({ title: newTitle, content: newContent });
@@ -83,13 +84,13 @@ export default function NoteEditor({ initialNote, onSave, isLoading, actions }: 
   // Handle title changes
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);
-    debouncedSave(newTitle, content);
+    debouncedSave([newTitle, content]);
   };
 
   // Handle content changes
   const handleContentChange = (newContent: string) => {
     setContent(newContent);
-    debouncedSave(title, newContent);
+    debouncedSave([title, newContent]);
   };
 
   // Format the last saved time

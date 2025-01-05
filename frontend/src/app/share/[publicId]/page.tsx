@@ -22,6 +22,12 @@ import {
 } from '@mdxeditor/editor';
 import '@mdxeditor/editor/style.css';
 
+interface ApiError {
+  response?: {
+    status: number;
+  };
+}
+
 const SharedNotePage: React.FC = () => {
   const { publicId } = useParams();
   const router = useRouter();
@@ -35,8 +41,9 @@ const SharedNotePage: React.FC = () => {
       try {
         const data = await notesApi.getSharedNote(publicId as string);
         setNote(data);
-      } catch (err: any) {
-        if (err.response?.status === 404) {
+      } catch (err: unknown) {
+        const error = err as ApiError;
+        if ('response' in error && error.response?.status === 404) {
           setError('This note does not exist or you don\'t have access to it.');
         } else {
           setError('An error occurred while loading the note.');

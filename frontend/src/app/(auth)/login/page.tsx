@@ -19,7 +19,7 @@ export default function LoginPage() {
     if (user) {
       router.push('/notes');
     }
-  }, [user]);
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
