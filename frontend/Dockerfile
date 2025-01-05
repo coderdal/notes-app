@@ -2,9 +2,6 @@ FROM node:18-alpine
 
 WORKDIR /usr/src/app
 
-# Install dependencies for node-gyp
-RUN apk add --no-cache python3 make g++
-
 # Copy package files
 COPY package*.json ./
 
@@ -20,11 +17,8 @@ ENV NODE_ENV production
 ENV PORT 3000
 ENV HOSTNAME "0.0.0.0"
 
-# Build the application
 RUN npm run build
 
-# Expose the port
 EXPOSE 3000
 
-# Start the application
-CMD ["npm", "start"] 
+CMD ["npm", "run", "start"]
