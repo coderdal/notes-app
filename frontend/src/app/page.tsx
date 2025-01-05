@@ -279,7 +279,7 @@ export default function HomePage() {
             </p>
             <div className="mt-8">
               <a
-                href="https://github.com/yourusername/notes-app"
+                href="https://github.com/coderdal/notes-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-stone-900 bg-white hover:bg-stone-50 transition-colors"
