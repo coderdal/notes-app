@@ -1,24 +1,45 @@
-FROM --platform=linux/amd64 node:18-alpine
+# Development Stage
+FROM node:18-alpine AS development
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm install --legacy-peer-deps
+RUN npm ci
 
-# Copy the rest of the application
 COPY . .
-
-# Set environment variables
-ENV NEXT_TELEMETRY_DISABLED 1
-ENV NODE_ENV production
-ENV PORT 3000
-ENV HOSTNAME "0.0.0.0"
-
-RUN npm run build
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+
+CMD ["npm", "run", "dev"]
+
+# Builder Stage
+FROM node:18-alpine AS builder
+
+WORKDIR /app
+
+COPY package*.json ./
+
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+# Production Stage 
+
+FROM node:18-alpine AS production
+
+WORKDIR /app
+
+# Copy the built artifacts from the builder stage
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+# Set the environment variables (if needed)
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+CMD ["node", "server.js"]
