@@ -4,7 +4,7 @@ A modern, full-stack note-taking application that enables users to create, manag
 
 ## 🚀 Live Demo
 
-[Live Application](#) <!-- TODO: Add your live application URL -->
+[Live Application](https://notes.erdal.net.tr/)
 
 ## ✨ Features
 
